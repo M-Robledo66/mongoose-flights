@@ -1,12 +1,18 @@
+import "dotenv/config.js"
 import createError from 'http-errors'
 import express from 'express'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import logger from 'morgan'
+import methodOverride from 'method-override'
+// Connect to the database with Mongoose
+import './config/database.js'
 
 // import routers
 import { router as indexRouter } from './routes/index.js'
-import { router as usersRouter } from './routes/users.js'
+// import { router as usersRouter } from './routes/users.js'
+import { router as flightRouter } from './routes/flights.js'
+import { router as mealsRouter } from './routes/meals.js'
 
 // set up app
 const app = express()
@@ -29,8 +35,10 @@ app.use(
 )
 
 // mounted routers
+app.use(methodOverride('_method'))
 app.use('/', indexRouter)
-app.use('/users', usersRouter)
+app.use('/meals', mealsRouter)
+app.use('/flights', flightRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
